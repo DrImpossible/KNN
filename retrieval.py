@@ -33,6 +33,24 @@ def knn_query(X_test,Y_test,X_train,Y_train,distance_type,num_neighbours,classes
 	print(precision,recall,average_precision)
 	return [precision,recall,average_precision]
 
+def extract_features(model,X_train,X_test=None,layername):
+	"""
+	Code to extract features from layers of the model.
+	Inputs: a) model (A keras model file)
+			b) X_train -> Training samples
+			c) X_test (optional) -> Testing samples
+	Outputs: The extracted features of the model
+	"""
+	get_layer = Model(input=model.input, output=model.get_layer(layername).output)
+  	relu1_features_train = get_layer.predict(X_train)
+  	if not X_test == None:
+  		relu1_features_test = get_layer.predict(X_test)
+  		
+  	print('Features extracted!')
+  	if not X_test == None:
+  		return [relu1_features_train,relu1_features_test]
+  	return relu1_features_train
+
 #X_train = np.load('X_train_mnist.npy')
 #Y_train = np.load('Y_train_mnist.npy')
 #X_test = np.load('X_test_mnist.npy')
